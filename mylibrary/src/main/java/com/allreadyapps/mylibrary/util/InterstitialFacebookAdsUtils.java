@@ -17,6 +17,7 @@ public class InterstitialFacebookAdsUtils {
     private InterstitialAd interstitialAd;
     private AdCloseListener adCloseListener;
     private boolean isReloaded = false;
+    private InterstitialAdListener interstitialAdListener;
 
     public static InterstitialFacebookAdsUtils getSharedInstance() {
         if (sharedInstance == null) {
@@ -25,7 +26,7 @@ public class InterstitialFacebookAdsUtils {
         return sharedInstance;
     }
 
-    public void interstitialAdDestroy(){
+    public void interstitialAdDestroy() {
         if (interstitialAd != null) {
             interstitialAd.destroy();
         }
@@ -35,7 +36,7 @@ public class InterstitialFacebookAdsUtils {
         try {
             AudienceNetworkAds.initialize(mContext);
             interstitialAd = new InterstitialAd(mContext, mContext.getResources().getString(R.string.FB_INTERSTITIALS_ID));
-            interstitialAd.setAdListener(new InterstitialAdListener() {
+            interstitialAdListener = new InterstitialAdListener() {
                 @Override
                 public void onInterstitialDisplayed(Ad ad) {
 
@@ -47,6 +48,7 @@ public class InterstitialFacebookAdsUtils {
                         adCloseListener.onAdClosed();
                     }
                     loadInterstitialAd();
+
                 }
 
                 @Override
@@ -71,7 +73,8 @@ public class InterstitialFacebookAdsUtils {
                 public void onLoggingImpression(Ad ad) {
 
                 }
-            });
+            };
+
 
             loadInterstitialAd();
 
@@ -95,7 +98,9 @@ public class InterstitialFacebookAdsUtils {
 
     private void loadInterstitialAd() {
         if (interstitialAd != null && !interstitialAd.isAdLoaded()) {
-            interstitialAd.loadAd();
+            interstitialAd.loadAd(interstitialAd.buildLoadAdConfig()
+                    .withAdListener(interstitialAdListener)
+                    .build());
         }
     }
 
@@ -106,8 +111,6 @@ public class InterstitialFacebookAdsUtils {
 
     public interface AdCloseListener {
         public void onAdClosed();
-
-
     }
 
 }

@@ -16,6 +16,7 @@ import com.facebook.ads.AudienceNetworkAds;
 
 public class BannerFacebookAdsUtils {
     private static BannerFacebookAdsUtils sharedInstance;
+    private String TAG = "BannerFacebookAdsUtils";
 
     private AdView adView;
 
@@ -37,12 +38,9 @@ public class BannerFacebookAdsUtils {
             AudienceNetworkAds.initialize(mContext);
              adView = new AdView(mContext, mContext.getResources().getString(R.string.FB_BANNER_ID), AdSize.BANNER_HEIGHT_50);
             final LinearLayout adContainer = (LinearLayout) ((Activity) mContext).findViewById(bannerLayout);
-            adView.loadAd();
-
-            adView.setAdListener(new AdListener() {
+            AdListener adListener = new AdListener() {
                 @Override
                 public void onError(Ad ad, AdError adError) {
-                    // Ad error callback
                     Log.e("Error: ", adError.getErrorMessage());
                 }
 
@@ -54,17 +52,19 @@ public class BannerFacebookAdsUtils {
 
                 @Override
                 public void onAdClicked(Ad ad) {
-                    // Ad clicked callback
+
                 }
 
                 @Override
                 public void onLoggingImpression(Ad ad) {
-                    // Ad impression logged callback
+
                 }
-            });
+            };
+            adView.loadAd(adView.buildLoadAdConfig().withAdListener(adListener).build());
+
 
         } catch (Exception e) {
-            Log.e("Catch in show FBbanner", e.getMessage() + "A");
+            Log.e(TAG, e.getMessage() + " A");
         }
     }
 }
