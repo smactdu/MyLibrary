@@ -13,42 +13,10 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdSize;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.interstitial.InterstitialAd;
-
 /**
  * Created by quang on 25/09/2015.
  */
 public class Tools {
-    private static InterstitialAd interstitialAd;
-
-    public static void admobBannerLayout(final Context mContext,
-                                         final int idLayout, String idAdmobBanner) {
-        String id = "";
-        try {
-            id = idAdmobBanner;
-            final AdView mAdView = new AdView((Activity) mContext);
-            mAdView.setAdSize(AdSize.SMART_BANNER);
-            mAdView.setAdUnitId(id);
-            AdRequest adRequest = new AdRequest.Builder().build();
-            mAdView.loadAd(adRequest);
-            mAdView.setAdListener(new AdListener() {
-                @Override
-                public void onAdLoaded() {
-                    ((LinearLayout) ((Activity) mContext).findViewById(idLayout))
-                            .removeView(mAdView);
-                    ((LinearLayout) ((Activity) mContext).findViewById(idLayout))
-                            .addView(mAdView);
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
 
 
     public static boolean isConnectingToInternet(Context context) {
